@@ -38,6 +38,18 @@ public class ReservationController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/{id}/confirm")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ReservationResponse> confirm(@PathVariable Long id) {
+        return ResponseEntity.ok(reservationService.confirmReservation(id));
+    }
+
+    @PostMapping("/{id}/complete")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ReservationResponse> complete(@PathVariable Long id) {
+        return ResponseEntity.ok(reservationService.completeReservation(id));
+    }
+
     @GetMapping("/mine")
     public ResponseEntity<List<ReservationResponse>> getMine(Authentication authentication) {
         return ResponseEntity.ok(reservationService.getMyReservations(authentication.getName()));
