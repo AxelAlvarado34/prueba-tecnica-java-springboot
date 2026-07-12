@@ -11,6 +11,7 @@ import com.axel.alvarado.coworking_service.dto.LoginRequest;
 import com.axel.alvarado.coworking_service.dto.UserRegisterRequest;
 import com.axel.alvarado.coworking_service.dto.UserResponse;
 import com.axel.alvarado.coworking_service.enums.Role;
+import com.axel.alvarado.coworking_service.exception.EmailAlreadyExistsException;
 import com.axel.alvarado.coworking_service.mapper.UserMapper;
 import com.axel.alvarado.coworking_service.model.User;
 import com.axel.alvarado.coworking_service.repository.UserRepository;
@@ -33,7 +34,7 @@ public class AuthService {
     public UserResponse register(UserRegisterRequest request) {
 
         if (userRepository.findByEmail(request.email()).isPresent()) {
-            throw new IllegalArgumentException("Ya existe un usuario registrado con ese email");
+            throw new EmailAlreadyExistsException("Ya existe un usuario registrado con ese email: " + request.email());
         }
 
         User user = User.builder()
