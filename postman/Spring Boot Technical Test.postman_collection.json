@@ -261,7 +261,7 @@
           "response": []
         },
         {
-          "name": "New Request",
+          "name": "Completar Reserva",
           "request": {
             "auth": {
               "type": "bearer",
