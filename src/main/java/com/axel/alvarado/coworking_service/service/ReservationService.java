@@ -16,6 +16,7 @@ import com.axel.alvarado.coworking_service.repository.UserRepository;
 import com.axel.alvarado.coworking_service.state.ReservationStateHandlerFactory;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +35,7 @@ public class ReservationService {
         private final ApplicationEventPublisher eventPublisher;
         private final PaymentGatewayClient paymentGatewayClient;
 
+        @CacheEvict(value = "occupancyReport", allEntries = true)
         @Transactional
         public ReservationResponse createReservation(ReservationRequest request, String userEmail) {
                 Space space = spaceRepository.findByIdForUpdate(request.spaceId())
@@ -71,6 +73,7 @@ public class ReservationService {
                 return ReservationMapper.toResponse(saved);
         }
 
+        @CacheEvict(value = "occupancyReport", allEntries = true)
         @Transactional
         public ReservationResponse cancelReservation(Long reservationId, String userEmail, boolean isAdmin) {
                 Reservation reservation = reservationRepository.findById(reservationId)
@@ -104,6 +107,7 @@ public class ReservationService {
                                 .toList();
         }
 
+        @CacheEvict(value = "occupancyReport", allEntries = true)
         @Transactional
         public ReservationResponse confirmReservation(Long reservationId) {
                 Reservation reservation = reservationRepository.findById(reservationId)
@@ -126,6 +130,7 @@ public class ReservationService {
                                 reservation.getEndDateTime()));
         }
 
+        @CacheEvict(value = "occupancyReport", allEntries = true)
         @Transactional
         public ReservationResponse completeReservation(Long reservationId) {
                 Reservation reservation = reservationRepository.findById(reservationId)
