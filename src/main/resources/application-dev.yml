@@ -1,0 +1,18 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+management:
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    com.axel.alvarado.coworking_service: DEBUG
+
+payment:
+  gateway:
+    url: http://payment-gateway-simulado.local:9999/validate
