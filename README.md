@@ -15,7 +15,7 @@ Levanta PostgreSQL y la aplicación (puerto `8080`). El esquema se crea automát
 
 **Verificación:** `curl http://localhost:8080/actuator/health`
 
-**Documentación:** Swagger en `/swagger-ui.html` (botón "Authorize" para pegar el token una vez), y `coworking-service-requests.http` en la raíz del repo con ejemplos de todos los endpoints.
+**Documentación:** Swagger en `/swagger-ui.html` (botón "Authorize" para pegar el token una vez), y `la colección de postman` en la raíz del repo dentro de la carpeta postman con ejemplos de todos los endpoints.
 
 ## Credenciales por defecto
 
