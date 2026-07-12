@@ -1,6 +1,6 @@
 package com.axel.alvarado.coworking_service.model;
 
-import javax.management.relation.Role;
+import com.axel.alvarado.coworking_service.enums.Role;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
