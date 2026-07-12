@@ -32,6 +32,7 @@ public class ReservationService {
         private final ReservationStateHandlerFactory stateHandlerFactory;
 
         private final ApplicationEventPublisher eventPublisher;
+        private final PaymentGatewayClient paymentGatewayClient;
 
         @Transactional
         public ReservationResponse createReservation(ReservationRequest request, String userEmail) {
@@ -59,6 +60,14 @@ public class ReservationService {
                                 .build();
 
                 Reservation saved = reservationRepository.save(reservation);
+
+                boolean paymentValidated = paymentGatewayClient.validatePayment(saved.getId());
+                if (paymentValidated) {
+                        confirmAndNotify(saved);
+                } else {
+                        stateHandlerFactory.getHandler(saved.getStatus()).markPendingPayment(saved);
+                }
+
                 return ReservationMapper.toResponse(saved);
         }
 
@@ -101,6 +110,12 @@ public class ReservationService {
                                 .orElseThrow(() -> new ResourceNotFoundException(
                                                 "Reserva no encontrada: " + reservationId));
 
+                confirmAndNotify(reservation);
+
+                return ReservationMapper.toResponse(reservation);
+        }
+
+        private void confirmAndNotify(Reservation reservation) {
                 stateHandlerFactory.getHandler(reservation.getStatus()).confirm(reservation);
 
                 eventPublisher.publishEvent(new ReservationConfirmedEvent(
@@ -109,8 +124,6 @@ public class ReservationService {
                                 reservation.getSpace().getName(),
                                 reservation.getStartDateTime(),
                                 reservation.getEndDateTime()));
-
-                return ReservationMapper.toResponse(reservation);
         }
 
         @Transactional
